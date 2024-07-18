@@ -9,8 +9,8 @@ const JWT_SECRET = require('../config')
 const signupSchema = zod.Schema({
     username: zod.string().email(),
     password: zod.string(),
-    firstname: zod.string(),
-    lastname: zod.string()
+    firstName: zod.string(),
+    lastName: zod.string()
 })
 router.post('/signup', async (req, res) => {
     const body = req.body;
@@ -62,8 +62,8 @@ router.post('/signin', async (req, res) => {
 })
 const updateBody = zod.Schema({
     password: zod.string().optional(),
-    firstname: zod.string().optional(),
-    lastname: zod.string().optional(),
+    firstName: zod.string().optional(),
+    lastName: zod.string().optional(),
 })
 router.put('/', authMiddleware, async (req, res) => {
     const {success} = updateBody.safeParse(req.body)
@@ -91,11 +91,11 @@ router.get('/bulk', async (req, res) => {
     const filter = req.query.filter || ''
     const users = await User.find({
         $or: [{
-            firstname: {
+            firstName: {
                 $regex: filter
             }
         },{
-            lastname: {
+            lastName: {
                 $regex: filter
             }
         }]
