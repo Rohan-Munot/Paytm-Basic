@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const JWT_SECRET = require('../config')
 
-const signupSchema = zod.Schema({
+const signupSchema = zod.object({
     username: zod.string().email(),
     password: zod.string(),
     firstName: zod.string(),
@@ -40,7 +40,7 @@ router.post('/signup', async (req, res) => {
     })
 })
 
-const signinSchema = zod.Schema({
+const signinSchema = zod.object({
     username: zod.string().email(),
     password: zod.string()
 })
@@ -61,7 +61,7 @@ router.post('/signin', async (req, res) => {
         })
     }
 })
-const updateBody = zod.Schema({
+const updateBody = zod.object({
     password: zod.string().optional(),
     firstName: zod.string().optional(),
     lastName: zod.string().optional(),
