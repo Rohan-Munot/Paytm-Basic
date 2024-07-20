@@ -1,7 +1,7 @@
 const express = require('express');
 const zod = require('zod');
 const {authMiddleware} = require('../authMiddleware')
-const {User} = require("../db");
+const {User, Account} = require("../db");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const JWT_SECRET = require('../config')
@@ -23,19 +23,20 @@ router.post('/signup', async (req, res) => {
     const user = User.findOne({
         username: body.username
     })
-    if (user._id){
+    if (user){
         return res.json({
             msg: "Email already taken"
         })
     }
 
     const dbUser = await User.create(body)
-    // const token = jwt.sign({
-    //     userId: dbUser._id
-    // }, JWT_SECRET)
+    const userId = dbUser._id;
+    await Account.create({
+        userId: userId,
+        balance:1+Math.random()*10000
+    })
     res.json({
         msg: 'User created successfully',
-        // token: token
     })
 })
 
