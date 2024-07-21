@@ -14,7 +14,12 @@ const signupSchema = zod.object({
 })
 router.post('/signup', async (req, res) => {
     const body = req.body;
-    const {success} = signupSchema.safeParse(req.body);
+    const {success} = signupSchema.safeParse({
+        username: body.username,
+        password: body.password,
+        firstName: body.firstName,
+        lastName: body.lastName
+    });
     if (!success) {
         return res.json({
             msg: "Invalid Inputs"
@@ -24,20 +29,28 @@ router.post('/signup', async (req, res) => {
         username: body.username
     })
     if (user){
+        const dbUser = await User.create({
+            username: body.username,
+            password: body.password,
+            firstName: body.firstName,
+            lastName: body.lastName
+        })
+        const userId = dbUser._id;
+        await Account.create({
+            userId: userId,
+            balance:1+Math.random()*10000
+        })
+        res.json({
+            msg: 'User created successfully',
+        })
+
+    }else {
         return res.json({
             msg: "Email already taken"
         })
     }
 
-    const dbUser = await User.create(body)
-    const userId = dbUser._id;
-    await Account.create({
-        userId: userId,
-        balance:1+Math.random()*10000
-    })
-    res.json({
-        msg: 'User created successfully',
-    })
+
 })
 
 const signinSchema = zod.object({

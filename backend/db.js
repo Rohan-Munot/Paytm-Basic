@@ -9,24 +9,20 @@ mongoose.connect('mongodb://127.0.0.1:27017/paytm').then(r => console.log('Conne
 const UserSchema = new Schema({
     fistName: {
         type: String,
-        required: true,
         minlength: 3,
         trim: true
     },
     lastName: {
         type: String,
-        required: true,
         trim: true
     },
     userName: {
         type: String,
-        required: true,
         unique: true,
         minlength: 3,
     },
     password: {
         type: String,
-        required: true,
         minlength: 5,
     }
 })
@@ -35,11 +31,9 @@ const accountSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
     },
     balance: {
         type: Number,
-        required: true,
     }
 })
 
