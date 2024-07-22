@@ -4,10 +4,10 @@ const {authMiddleware} = require('../authMiddleware')
 const {User, Account} = require("../db");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const JWT_SECRET = require('../config')
+const {JWT_SECRET} = require('../config')
 
 const signupSchema = zod.object({
-    username: zod.string().email(),
+    userName: zod.string().email(),
     password: zod.string(),
     firstName: zod.string(),
     lastName: zod.string()
@@ -15,7 +15,7 @@ const signupSchema = zod.object({
 router.post('/signup', async (req, res) => {
     const body = req.body;
     const {success} = signupSchema.safeParse({
-        username: body.username,
+        userName: body.userName,
         password: body.password,
         firstName: body.firstName,
         lastName: body.lastName
@@ -26,11 +26,11 @@ router.post('/signup', async (req, res) => {
         })
     }
     const user = User.findOne({
-        username: body.username
+        userName: body.userName
     })
     if (user){
         const dbUser = await User.create({
-            username: body.username,
+            userName: body.userName,
             password: body.password,
             firstName: body.firstName,
             lastName: body.lastName
@@ -54,16 +54,16 @@ router.post('/signup', async (req, res) => {
 })
 
 const signinSchema = zod.object({
-    username: zod.string().email(),
+    userName: zod.string().email(),
     password: zod.string()
 })
 router.post('/signin', async (req, res) => {
-    const username = req.body.username;
+    const userName = req.body.userName;
     const password = req.body.password;
-    const user =await User.findOne({username: username, password: password})
+    const user =await User.findOne({userName: userName, password: password})
     if (user) {
         const token = jwt.sign({
-            username
+            userId: user._id
         }, JWT_SECRET)
         res.json({
             token
@@ -116,7 +116,7 @@ router.get('/bulk', async (req, res) => {
     })
     res.json({
         user: users.map(user => ({
-            username: user.username,
+            username: user.userName,
             firstName: user.firstName,
             lastName: user.lastName,
             _id: user._id

@@ -4,12 +4,13 @@ const Schema = mongoose.Schema
 
 // Creating a user database schema
 
-mongoose.connect('mongodb://127.0.0.1:27017/paytm').then(r => console.log('Connected to database'));
+mongoose.connect('mongodb+srv://rohanmunot24:rohanmunot@cluster0.spmyctg.mongodb.net/paytm').then(r => console.log('Connected to database'));
 
 const UserSchema = new Schema({
-    fistName: {
+    firstName: {
         type: String,
         minlength: 3,
+        required: true,
         trim: true
     },
     lastName: {
@@ -18,11 +19,13 @@ const UserSchema = new Schema({
     },
     userName: {
         type: String,
+        required: true,
         unique: true,
         minlength: 3,
     },
     password: {
         type: String,
+        required: true,
         minlength: 5,
     }
 })
