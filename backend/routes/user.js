@@ -36,12 +36,19 @@ router.post('/signup', async (req, res) => {
             lastName: body.lastName
         })
         const userId = dbUser._id;
+
         await Account.create({
-            userId: userId,
-            balance:1+Math.random()*10000
+            userId,
+            balance: 1 + Math.random() * 10000
         })
+
+        const token = jwt.sign({
+            userId
+        }, JWT_SECRET);
+
         res.json({
-            msg: 'User created successfully',
+            message: "User created successfully",
+            token: token
         })
 
     }else {

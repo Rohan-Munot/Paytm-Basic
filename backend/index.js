@@ -12,5 +12,5 @@ app.use('/api/v1/user' , userRouter);
 app.use('/api/v1/account' ,accountRouter)
 
 app.listen(3000, ()=>{
-    console.log('Server running ')
+    console.log('Server running on 3000 ')
 })
